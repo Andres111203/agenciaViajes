@@ -10,41 +10,46 @@ nombres_paquetes = [
 descripciones_paquetes = [
     "Explora el ecosistema amazónico, navega por el río, conoce comunidades indígenas y admira fauna exótica como delfines rosados y aves multicolores.",
     "Vive la experiencia cafetera desde la cosecha hasta la taza. Recorre pintorescos pueblos y disfruta de las mejores variedades de café.",
-    "Realiza un trekking por la Sierra Nevada hacia este antiguo asentamiento indígena, cruzando ríos y selvas mientras descubres la historia de los Tayrona. ",
-    "Disfruta de caminatas por paisajes áridos, relájate en piscinas naturales y contempla un cielo estrellado incomparable. ",
-    " Practica buceo o snorkel en uno de los mayores arrecifes de coral y sumérgete en la cultura isleña, su gastronomía y ambiente relajado. "
+    "Realiza un trekking por la Sierra Nevada hacia este antiguo asentamiento indígena, cruzando ríos y selvas mientras descubres la historia de los Tayrona.",
+    "Disfruta de caminatas por paisajes áridos, relájate en piscinas naturales y contempla un cielo estrellado incomparable.",
+    "Practica buceo o snorkel en uno de los mayores arrecifes de coral y sumérgete en la cultura isleña, su gastronomía y ambiente relajado."
 ]
 
 precios_paquetes = [
-    800,  # Precio de Magia del Amazonas
-    450,  # Precio de Rutas del Café
-    900,  # Precio de Misterios de Ciudad Perdida
-    350,  # Precio de Aventura en el Desierto de la Tatacoa
-    700   # Precio de Paraíso Submarino
+    800000,  # Precio de Magia del Amazonas
+    750000,  # Precio de Rutas del Café
+    900000,  # Precio de Misterios de Ciudad Perdida
+    350000,  # Precio de Aventura en el Desierto de la Tatacoa
+    700000   # Precio de Paraíso Submarino
 ]
-#diccionario para guardar las reservas de paquetes de cada cliente 
-reservas= {} 
-#diccionario para clientes en el sistema
+
+vuelos_disponibles = [
+    {"nombre": "Vuelo A", "origen": "Bogotá", "destino": "Leticia", "precio": 300000},  # Magia del Amazonas
+    {"nombre": "Vuelo B", "origen": "Medellín", "destino": "Manizales", "precio": 450000},  # Rutas del Café en el Eje Cafetero
+    {"nombre": "Vuelo C", "origen": "Cali", "destino": "Santa Marta", "precio": 250000},  # Misterios de Ciudad Perdida
+    {"nombre": "Vuelo D", "origen": "Bucaramanga", "destino": "Neiva", "precio": 400000},  # Aventura en el Desierto de la Tatacoa
+    {"nombre": "Vuelo E", "origen": "Cartagena", "destino": "San Andrés", "precio": 350000}  # Paraíso Submarino
+]
+
+# Diccionario para guardar las reservas de paquetes de cada cliente 
+reservas = {} 
+# Diccionario para clientes en el sistema
 clientes = {}
-idClient = 1
 idRes = 1
 
-
-#Agregar clientes
+# Agregar clientes
 def agregar_clientes():
+    nombre = input("Ingrese su nombre: ")
+    telefono = input("Ingrese su teléfono: ")
+    direccion = input("Ingrese su dirección: ")
+    identificacion = input("Ingrese su documento de identidad: ")
+    clientes[identificacion] = {
+        "nombre": nombre,
+        "telefono": telefono,
+        "direccion": direccion
+    }
 
-    #global identificacion
-    nombre = input("ingrese su nombre: ")
-    telefono = input("ingrese su telefeno: ")
-    direccion = input("ingrese su direccion: ")
-    identificacion = input("ingrese su documento de identidad: ")
-    clientes[identificacion] = {}
-    clientes[identificacion]["nombre"] = nombre
-    clientes[identificacion]["telefono"] = telefono
-    clientes[identificacion]["direccion"] = direccion
-    
 # Mostrar opciones de paquetes
-
 def mostrar_paquetes():
     global idRes
     print("\nPaquetes Turísticos Disponibles:\n")
@@ -55,45 +60,43 @@ def mostrar_paquetes():
 
     while True:
         seleccion = int(input("Seleccione el número del paquete que desea (1-5), o 0 para salir: "))
-        user = input("ingrese su identificacion para elegir el paquete: ")
+        user = input("Ingrese su identificación para elegir el paquete: ")
     
         if not clientes:
             print("No hay clientes registrados en el sistema")
             return
         else:
-                if user not in clientes.keys():
-                    print(f"usuario con identifiacion {user} no esta registrado...")
+            if user not in clientes.keys():
+                print(f"Usuario con identificación {user} no está registrado...")
+                return
+            else:
+                if seleccion == 0:
+                    print("Gracias por usar nuestros servicios. ¡Hasta pronto!")
+                    return
+                elif 1 <= seleccion <= len(nombres_paquetes):
+                    print(f'El cliente con identificación {user} y de nombre {clientes[user]["nombre"]} ha seleccionado el paquete: {nombres_paquetes[seleccion - 1]}')
+                    print(f"Descripción: {descripciones_paquetes[seleccion - 1]}")
+                    print(f"Precio: ${precios_paquetes[seleccion - 1]}")
+                    reservas.update({
+                        "reserva " + str(idRes): {
+                            "Usuario": user, 
+                            "Nombre": clientes[user]["nombre"], 
+                            "paquete": nombres_paquetes[seleccion - 1], 
+                            "precio del paquete": precios_paquetes[seleccion - 1]
+                        }
+                    })
+                    idRes += 1
+                    print(reservas)
+                    print("\nSu paquete ha sido seleccionado exitosamente.\n")
                     return
                 else:
-                    if seleccion == 0:
-                        print("Gracias por usar nuestros servicios. ¡Hasta pronto!")
-                        return
-                    elif 1 <= seleccion <= len(nombres_paquetes):
-                        print(f'el cliente con identificacion {user}  y de nombre {clientes[user]["nombre"]} Ha seleccionado el paquete: {nombres_paquetes[seleccion - 1]}')
-                        print(f"Descripción: {descripciones_paquetes[seleccion - 1]}")
-                        print(f"Precio: ${precios_paquetes[seleccion - 1]}")
-                        reservas.update({
-                            "reserva " + str(idRes): {
-                                "Usuario": user, 
-                                "Nombre": clientes[user]["nombre"], 
-                                "paquete": nombres_paquetes[seleccion - 1], 
-                                "precio del paquete": precios_paquetes[seleccion - 1]}
-                        })
-                        idRes += 1
-                        print(reservas)
-                        print("\nSu paquete ha sido seleccionado exitosamente.\n")
-
-                        return
-                    else:
-                        print("Selección no válida, por favor intenta de nuevo.")
-                        break
+                    print("Selección no válida, por favor intenta de nuevo.")
 
 def reservaHoteles():
-    #global reservas
     global idRes
-    import time #genera retrazos en la ejecucion del codigo
-    import random # genera numeros aleatorios
-    from datetime import datetime, timedelta # Obtiene la fecha y hora actuales
+    import time
+    import random
+    from datetime import datetime, timedelta
 
     # Lista de hoteles con sus calificaciones en estrellas
     hoteles = [
@@ -113,18 +116,8 @@ def reservaHoteles():
     habitaciones = [
         {"numero": "Suite Junior", "incremento": 0},
         {"numero": "Suite Ejecutiva", "incremento": 80000},
-        {"numero": "Suite Presidencial", "inremento": 120000},
+        {"numero": "Suite Presidencial", "incremento": 120000},
     ]
-
-    # Función para generar una lista de fechas aleatorias
-    def fechas_disponibles(cantidad=5):
-        fechas = []
-        fecha_inicio = datetime.now()
-        for _ in range(cantidad):
-            dias_a_sumar = random.randint(1, 30)  # Generar un número aleatorio de días entre 1 y 30
-            nueva_fecha = fecha_inicio + timedelta(days=dias_a_sumar)
-            fechas.append(nueva_fecha.strftime("%d-%m-%Y"))  # Formato de fecha DD-MM-YYYY
-        return fechas
 
     # Función para mostrar los hoteles disponibles y permitir elegir uno
     def mostrar_y_elegir_hotel():
@@ -134,15 +127,14 @@ def reservaHoteles():
         for indice, hotel in enumerate(hoteles, 1):
             print(f"{indice}. {hotel['nombre']} - {hotel['calificacion']} estrellas")
         
-        # Ahora se pregunta directamente al cliente en qué hotel desea hospedarse
         while True:
-            documento = input("ingrese su numero de documento para realizar la reserva del hotel...")
+            documento = input("Ingrese su número de documento para realizar la reserva del hotel: ")
             if not clientes:
                 print("No hay clientes registrados en el sistema")
                 return
             else:
                 if documento not in clientes.keys():
-                    print(f"usuario con identificacion {documento} no esta registrado...")
+                    print(f"Usuario con identificación {documento} no está registrado...")
                     return
                 else:
                     try:
@@ -152,147 +144,208 @@ def reservaHoteles():
                             print(f"\n > Ha seleccionado el hotel: {hotel_seleccionado['nombre']} ({hotel_seleccionado['calificacion']} estrellas)\n")
 
                             # Actualizar la reserva donde el usuario coincide
-                            reserva_key = "reserva" + str(idRes-1)
                             for reserva in reservas.values():
                                 if reserva["Usuario"] == documento:
                                     reserva.update({
                                         "hotel": hotel_seleccionado['nombre'],
                                         "precio del hotel": hotel_seleccionado['precio por reserva']
                                     })
-                                    print(f"Reserva actualizada para el usuario: {documento}")
-                                
+                                    print(f"Reserva actualizada para el usuario con documento #: {documento}")
                                     break  # Salir del bucle si se encontró y actualizó la reserva
-                            
                             else:
-                                print(f"No se encontró la reserva para el usuario: {documento}")
+                                print(f"No se encontró la reserva para el usuario con documento #: {documento}")
                             return
                         else:
                             print("Opción inválida. Por favor, elija un número válido.")
                     except ValueError:
                         print("Error. Por favor ingrese un número válido.")
 
-    #Función para mostrar los tipos de habitaciones disponibles
+    # Función para mostrar los tipos de habitaciones disponibles
     def mostrar_habitaciones():
         print("\n-- Tipos de habitaciones disponibles --")
         for indice, habitacion in enumerate(habitaciones, 1):
             print(f"> {indice}. {habitacion['numero']}")
 
-        # Se le pregunta al cliente en qué tipo de habitación desea quedarse
         while True:
-            try:
-                seleccion = int(input("\n > Ingrese el número de habitación en la cual desea quedarse: "))
-                if 1 <= seleccion <= len(habitaciones):
-                    habitacion_seleccionada = habitaciones[seleccion - 1]
-                    print(f"\n > Ha seleccionado la habitacion: {habitacion_seleccionada['numero']}\n")
-                    break
-                else:
-                    print("Opción inválida. Por favor, elija un número válido.")
-            except ValueError:
-                print("Error. Por favor ingrese un número válido.")
-
-    # Función para mostrar las fechas disponibles para cada hotel
-    def mostrar_fechas():
-        print("\n-- Fechas disponibles --")
-        for hotel in hoteles:
-            print(f"{hotel['nombre']} ({hotel['calificacion']} estrellas):")
-            fechas = fechas_disponibles()
-            for fecha in fechas:
-                print(f"  - {fecha}")
-            print()  # Espacio entre hoteles
-            
-
-    # Menú principal fuera del bucle
-    def mostrar_menu():
-        print("\n-------------- RESERVA DE HOTELES ---------------\n")
-        print("1. Mostrar y elegir un hotel.")
-        print("2. Mostrar tipos de habitaciones.")
-        print("3. Mostrar fechas disponibles.")
-        print("4. Salir.")
-        print("-------------------------------------------")
-
-
-    # Menú de reserva
-    def menu_reserva():
-        mostrar_menu()
-        while True:
-            opcion = input("> Ingrese el número de la opción con la cual desea continuar: ")
-            if opcion == "1":
-                print("\n Redirigiendo...")
-                time.sleep(1)
-                mostrar_y_elegir_hotel()  # Llama directamente a la función que muestra y pregunta
-                break
-            elif opcion == "2":
-                print("\n Redirigiendo...")
-                time.sleep(1)
-                #mostrar_habitaciones()
-                #mostrar_menu()  # Vuelve a mostrar el menú después de ver habitaciones
-                break
-            elif opcion == "3":
-                print("\n Redirigiendo...")
-                time.sleep(1)
-                mostrar_fechas()
-                #mostrar_menu()  # Vuelve a mostrar el menú después de ver fechas
-                break
-            elif opcion == "4":
-                print("Gracias por utilizar nuestros servicios. ¡Hasta pronto!")
-                break
+            documento = input("Ingrese su número de documento para realizar la reserva del hotel: ")
+            if not clientes:
+                print("No hay clientes registrados en el sistema")
+                return
             else:
-                print("Opción inválida. Por favor, intente nuevamente.")
+                if documento not in clientes.keys():
+                    print(f"Usuario con identificación {documento} no está registrado...")
+                    return
+                else:
+                    try:
+                        seleccion = int(input("\n > Ingrese el número de habitación en la cual desea quedarse: "))
+                        numHab = habitaciones[seleccion - 1]['numero']
+                        incremento = habitaciones[seleccion - 1]['incremento']
+                        costo_total_habitacion = hoteles[0]['precio por reserva'] + incremento  # Suponiendo que el primer hotel es el elegido
+                        print(f"\n > Ha seleccionado la habitación: {numHab} con un costo adicional de ${incremento}.")
+                        
+                        # Actualizar la reserva donde el usuario coincide
+                        for reserva in reservas.values():
+                            if reserva["Usuario"] == documento:
+                                reserva.update({
+                                    "habitacion": numHab,
+                                    "precio de habitaciones": costo_total_habitacion
+                                })
+                                print(f"Reserva de habitación actualizada para el usuario: {documento}")
+                                return
+                        else:
+                            print(f"No se encontró la reserva para el usuario: {documento}")
+                        return
+                    except (ValueError, IndexError):
+                        print("Error. Por favor ingrese un número válido.")
 
-    # Llamada al menú principal
-    menu_reserva()
+    mostrar_y_elegir_hotel()
+    mostrar_habitaciones()
 
+def seleccionar_origen():
+    # Lista de opciones de lugar de origen
+    origenes = [
+        "Bogotá", 
+        "Medellín", 
+        "Cali"
+    ]
+    while True:
+        print("Lugares de origen:")
+        for i in range(len(origenes)):
+            print(f"{i + 1}. {origenes[i]}")
+        seleccion_origen = int(input("Seleccione el número de su lugar de origen o 0 para salir: ")) - 1
+        
+        if seleccion_origen == -1:
+            print("Gracias por usar nuestros servicios. ¡Hasta pronto!")
+            return None
+        elif 0 <= seleccion_origen < len(origenes):
+            return origenes[seleccion_origen]
+        else:
+            print("Selección no válida, por favor intenta de nuevo.")
 
+# Lista de destinos
+destinos = [
+    "Leticia, Amazonas", 
+    "Armenia, Rutas del Café", 
+    "Santa Marta, Ciudad Perdida", 
+    "Neiva, Desierto de la Tatacoa", 
+    "San Andrés y Providencia, Paraíso Submarino"
+]
 
+# Lista de precios de los vuelos
+precios_vuelos = {
+    "Bogotá-Leticia, Amazonas": 1200,
+    "Bogotá-Armenia, Rutas del Café": 800,
+    "Bogotá-Santa Marta, Ciudad Perdida": 600,
+    "Bogotá-Neiva, Desierto de la Tatacoa": 700,
+    "Bogotá-San Andrés y Providencia": 500,
+    "Medellín-Leticia, Amazonas": 1150,
+    "Medellín-Armenia, Rutas del Café": 850,
+    "Medellín-Santa Marta, Ciudad Perdida": 650,
+    "Medellín-Neiva, Desierto de la Tatacoa": 750,
+    "Medellín-San Andrés y Providencia": 1150,
+    "Cali-Leticia, Amazonas": 1290,
+    "Cali-Armenia, Rutas del Café": 900,
+    "Cali-Santa Marta, Ciudad Perdida": 700,
+    "Cali-Neiva, Desierto de la Tatacoa": 800,
+    "Cali-San Andrés y Providencia": 1200
+}
 
+def seleccionar_destino(lugar_origen):
+    while True:
+        print("\nDestinos y sus costos desde tu ciudad de origen seleccionada:")
+        for i in range(len(destinos)):
+            destino = destinos[i]
+            precio = precios_vuelos.get(f"{lugar_origen}-{destino}")
+            print(f"{i + 1}. {destino} - Precio: ${precio}")
+        
+        seleccion_destino = int(input("Seleccione el número de su destino o 0 para salir: ")) - 1
+        
+        if seleccion_destino == -1:
+            print("Gracias por usar nuestros servicios. ¡Hasta pronto!")
+            return None
+        elif 0 <= seleccion_destino < len(destinos):
+            return destinos[seleccion_destino]
+        else:
+            print("Selección no válida, por favor intenta de nuevo.")
 
-#datos del total a pagar por las reservas
+def reservaVuelos():
+    global idRes
+    lugar_origen = seleccionar_origen()
+    if lugar_origen is None:
+        return
+
+    destino_seleccionado = seleccionar_destino(lugar_origen)
+    if destino_seleccionado is None:
+        return
+
+    cantidad_personas = int(input("Cantidad de personas que viajan: "))
+    
+    # Calcular el costo total del vuelo
+    ruta = f"{lugar_origen}-{destino_seleccionado}"
+    costo_vuelo_base = precios_vuelos.get(ruta, 0)  # Precio base si no está en el diccionario
+    costo_total_vuelo = costo_vuelo_base * cantidad_personas
+
+    # Obtener documento del cliente
+    documento = input("Ingrese su número de documento para realizar la reserva del vuelo: ")
+    if documento not in clientes.keys():
+        print("Usuario con identificación no está registrado.")
+        return
+
+    # Actualizar la reserva donde el usuario coincide
+    for reserva in reservas.values():
+        if reserva["Usuario"] == documento:
+            reserva.update({
+                "vuelo": destino_seleccionado,
+                "precio del vuelo": costo_total_vuelo
+            })
+            print(f"Reserva actualizada para el usuario: {documento}")
+            print(f"Total del vuelo: ${costo_total_vuelo}")
+            return
+
+    print(f"No se encontró la reserva para el usuario: {documento}")
+
 def datosPago():
     global reservas
     print("\nDATOS DE PAGO DE LAS RESERVAS")
-    doc = input("ingrese su documento para consultar los valores de la reserva: ")
+    doc = input("Ingrese su documento para consultar los valores de la reserva: ")
     if doc not in clientes.keys():
-        print("el usuario no tiene reservas")
+        print("El usuario no tiene reservas.")
     else:
-        print(f"el usuario con identificacion {doc} tiene las siguientes reservas")
-        #print(f"el valor total de la reserva es: ${sum(reservas.values())}")
-        print(reservas)
+        print(f"El usuario con identificación {doc} tiene las siguientes reservas:")
         suma = 0
         for val in reservas.values():
             if val['Usuario'] == doc:
-                suma += val["precio del paquete"] + val["precio del hotel"]
-        print(f"el valor total de la reserva es: ${suma}")
-       
-    
+                suma += val.get("precio del paquete", 0) + val.get("precio del hotel", 0) + val.get("precio de habitaciones", 0) + val.get("precio del vuelo", 0)
+        
+        print(f"Total a pagar por las reservas: ${suma}")
 
-#-------------------------------------------------------- MENU PRINCIPAL DE LA APLICACION --------------------------------------------------- 
-while True:
+# Funcion de ejecucion principal de la aplicacion
+def main():
+    while True:
+        print("\n--------- BIENVENIDO A TRAVEL 360 ---------")
+        print("1. Agregar cliente")
+        print("2. Reservar paquetes turísticos")
+        print("3. Reservar hotel")
+        print("4. Reservar vuelo")
+        print("5. Consultar datos de pago")
+        print("0. Salir")
+        opcion = input("Seleccione una opción: ")
 
-    print("------------- BIENVENIDO A TRAVEL 360 -------------")
-    print("1. Agregar cliente")
-    print("2. Elegir Paquete")
-    print("3. Realizar Reserva de hotel")
-    print("4. Realizar Reserva de vuelo")
-    print("5. Consultar precio a pagar por las reservas")
+        if opcion == '1':
+            agregar_clientes()
+        elif opcion == '2':
+            mostrar_paquetes()
+        elif opcion == '3':
+            reservaHoteles()
+        elif opcion == '4':
+            reservaVuelos()
+        elif opcion == '5':
+            datosPago()
+        elif opcion == '0':
+            print("Gracias por usar nuestros servicios. ¡Hasta pronto!")
+            break
+        else:
+            print("Opción no válida, por favor intenta de nuevo.")
 
-
-    try:
-        opcion = int(input("Ingrese la opción deseada: "))
-    except ValueError:
-        print("Error: Debe ingresar un número entero.")
-        continue
-
-    if opcion == 1:
-        agregar_clientes()
-    
-    elif opcion == 2:
-        mostrar_paquetes()
-
-    elif opcion == 3: 
-        reservaHoteles()
-
-    elif opcion == 4: 
-        pass #implementar reserva de vuelo
-    
-    elif opcion == 5:
-        datosPago()
+if __name__ == "__main__":
+    main()
