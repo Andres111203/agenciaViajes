@@ -228,7 +228,7 @@ destinos = [
     "Armenia, Rutas del Café", 
     "Santa Marta, Ciudad Perdida", 
     "Neiva, Desierto de la Tatacoa", 
-    "San Andrés y Providencia, Paraíso Submarino"
+    "San Andrés y Providencia"
 ]
 
 # Lista de precios de los vuelos
@@ -312,12 +312,14 @@ def datosPago():
         print("El usuario no tiene reservas.")
     else:
         print(f"El usuario con identificación {doc} tiene las siguientes reservas:")
+        print(reservas.get(doc,0))
         suma = 0
         for val in reservas.values():
             if val['Usuario'] == doc:
                 suma += val.get("precio del paquete", 0) + val.get("precio del hotel", 0) + val.get("precio de habitaciones", 0) + val.get("precio del vuelo", 0)
         
         print(f"Total a pagar por las reservas: ${suma}")
+        print("Gracias por utilizar nuestra aplicacion...")
 
 # Funcion de ejecucion principal de la aplicacion
 def main():
